@@ -27,14 +27,16 @@ In order to remain invariant to the optimization problem's dimension, we design 
 Finally, we design and analyze a reinforcement learning (RL) procedure based on the subspace optimization dynamics whose learnt policies outperform existing subspace optimization methods.
 
 ## Install
-- Pytorch 1.10.2
+-conda create -n venv_automl python=3.7.2 anaconda
+-conda activate venv_automl
+-conda install pytorch cudatoolkit=10.2 -c pytorch
 
 ## Results reproduction
 To reproduce the performance of the main model of our paper on the Robust Linear Regression objective as described in "Learning to Optimize", by Li and Malik (ICLR 2017):
 
 1. Run `python main.py`
 
-The model should give a 30% improvement in convergence.
+The model should give a 42% improvement in convergence over the baseline.
 
 The Model repository contains the pretrained agent. Make sure to configure the script with the agent's pre-trained weights.
 
