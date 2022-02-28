@@ -27,8 +27,8 @@ In order to remain invariant to the optimization problem's dimension, we design 
 Finally, we design and analyze a reinforcement learning (RL) procedure based on the subspace optimization dynamics whose learnt policies outperform existing subspace optimization methods.
 
 ## Install
-- conda create -n venv_automl python=3.7.2 anaconda
-- conda activate venv_automl
+- conda create -n venv_mso python=3.7 anaconda
+- conda activate venv_mso
 - conda install pytorch cudatoolkit=10.2 -c pytorch
 
 ## Results reproduction
