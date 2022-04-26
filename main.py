@@ -7,7 +7,7 @@ from torch.distributions.categorical import Categorical
 import torch.nn as nn
 from torch.utils.data import TensorDataset
 import logging
-
+import matplotlib.pyplot as plt
 
 class MO_agent(nn.Module):
     def __init__(self):
@@ -265,7 +265,7 @@ if __name__ == '__main__':
             x = self.fc(x)
             return x
 
-    device = torch.device("cuda" if True else "cpu")
+    device = torch.device("cuda" if False else "cpu")
     seed = 100
     np.random.seed(seed)
     torch.manual_seed(seed)
@@ -273,15 +273,15 @@ if __name__ == '__main__':
     # SE (SESOP): Sequential subspace optimization method for large-scale unconstrained problems by G Narkiss and M Zibulesky
     # ORTH (SE with memory_size=0): Orth-method for smooth convex optimization, by A Nemirovski
     methods = ['MO', 'RB', 'SE']
-    num_trials = 50
-    num_epochs = {'MO': 2000, 'RB': 2000, 'SE': 2000}
+    num_trials = 100
+    num_epochs = {'MO': 1500, 'RB': 1500, 'SE': 1500}
     trial_seeds = seed + np.arange(num_trials)
 
-    output_file = f'./results.txt'
-    logging.basicConfig(filename=output_file, level=logging.DEBUG)
-
+    logging.basicConfig(filename='./results.txt', level=logging.DEBUG)
+    convergence_res = {}
     for method in methods:
         logging.info(method)
+        res = []
         for i, seed in enumerate(trial_seeds):
             np.random.seed(seed)
             torch.manual_seed(seed)
@@ -293,7 +293,7 @@ if __name__ == '__main__':
             model = Net(100).to(device)
             optimizer = MSO(model.parameters(), cfg={
                             'agent': f'{method}', 'memory_size': 10})
-
+            res_curr = []
             for ii in range(num_epochs[method]):
                 for x, y in train_loader:
                     x, y = x.to(device), y.to(device)
@@ -310,6 +310,27 @@ if __name__ == '__main__':
                             with torch.no_grad():
                                 return loss()
                     optimizer.step(objective)
-                print(f'Epoch {ii} Loss: {loss().item()}\n')
+                print(f'Epoch {ii} Loss: {loss().item()}')
                 logging.debug(f'Epoch {ii} Loss: {loss().item()}')
+                res_curr.append(loss().item())
             print(f'Final Loss: {loss().item()}\n')
+            res.append(res_curr)
+        convergence_res[method] = np.stack(res)
+    print(convergence_res)
+    ###
+    fig = plt.figure()
+    for k,v in convergence_res.items():
+        plt.semilogy(v.mean(0),linewidth=3,label=k)
+        plt.fill_between(np.arange(0, v.shape[1]),
+                    v.mean(0) - v.std(0),v.mean(0) + v.std(0),alpha=0.2)
+    plt.legend()
+    plt.xlabel('Iteration', fontsize=14)
+    plt.ylabel('Loss', fontsize=14)
+    plt.title('Convergence')
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.tight_layout()
+    plt.grid(True, which="both", ls="--")
+    plt.ylim([1e-4,2])
+    plt.savefig(f'convergence_plot_{num_trials}.png')
+    plt.close()
