@@ -273,7 +273,7 @@ if __name__ == '__main__':
     # SE (SESOP): Sequential subspace optimization method for large-scale unconstrained problems by G Narkiss and M Zibulesky
     # ORTH (SE with memory_size=0): Orth-method for smooth convex optimization, by A Nemirovski
     methods = ['MO', 'RB', 'SE']
-    num_trials = 100
+    num_trials = 10
     num_epochs = {'MO': 1500, 'RB': 1500, 'SE': 1500}
     trial_seeds = seed + np.arange(num_trials)
 
