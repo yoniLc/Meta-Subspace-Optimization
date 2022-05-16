@@ -1,7 +1,7 @@
 # Efficient Meta Subspace Optimization
 
-This repository includes the code accompanying the submission to AutoML 2022 entitled "Efficient Meta Subspace Optimization".
-
+This repository includes some of the implementation of the paper
+["Efficient Meta Subspace Optimization"](https://arxiv.org/abs/2110.14920).
 
 <p align="center">
 <img src="model/arch.PNG" alt="Meta Subspace Optimization"
@@ -45,9 +45,8 @@ This repository is released under the CC-BY-NC-SA 4.0. license as found in the L
 
 
 
-<!--
-Citation
---------
+## Citation
+
 Please cite this work in your publications if it helps your research:
 
 
@@ -57,5 +56,5 @@ Please cite this work in your publications if it helps your research:
 	  journal={arXiv preprint arXiv:2110.14920},
 	  year={2021}
 	}
--->
+
 
